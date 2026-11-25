@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}FinTrack AI | Monthly Report{% endblock %}
+{% block content %}
+<section class="hero">
+    <p class="eyebrow">MONTHLY ANALYSIS</p>
+    <h1>Your spending report</h1>
+    <p>Overview for {{ current_month }}</p>
+</section>
+<section class="cards report-cards">
+    <article class="stat"><p>Total spending</p><h2>₹{{ "%.2f"|format(total) }}</h2></article>
+    <article class="stat"><p>Highest spending category</p><h2>{{ highest_category }}</h2></article>
+    <article class="stat featured"><p>Suggested budget</p><h2>₹{{ "{:,}".format(recommendation.budget) }}</h2></article>
+</section>
+<section class="panel">
+    <h2>Category breakdown</h2>
+    {% if category_totals %}
+        {% for category, amount in category_totals.items() %}
+        <div class="bar-row">
+            <div class="bar-label"><span>{{ category }}</span><strong>₹{{ "%.2f"|format(amount) }} · {{ "%.0f"|format(amount / total * 100) }}%</strong></div>
+            <div class="bar"><div style="width: {{ amount / total * 100 }}%"></div></div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p class="empty">No expenses recorded for this month yet.</p>
+    {% endif %}
+</section>
+<section class="panel">
+    <h2>Smart suggestions</h2>
+    <ul>{% for tip in recommendation.tips %}<li class="tip-item">{{ tip }}</li>{% endfor %}</ul>
+    <p class="note">This is an educational project. Recommendations are estimates, not professional financial advice.</p>
+</section>
+{% endblock %}
